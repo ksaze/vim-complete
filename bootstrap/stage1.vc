@@ -1,0 +1,172 @@
+\\# Stage 1 compiler
+\\# Preprocesses the source by removing comments and empty lines.
+\\# Adds any required module dependencies using VC.unresolved()
+\\# Emits a Lua wrapper that invokes VC.run().
+\\# No syntax errors at this point
+\\#
+\\#Steps:
+\\#  1. Copy source buffer to output buffer.
+\\#  2. Remove comments and empty lines.
+\\#  3. Mark read references for linker to resolve
+\\#  4. Escape Lua string characters.
+\\#  5. Quote each line and append a comma
+\\#  6. Wrap in VC.run().
+\\#  7. Write output 
+
+\\ Copy the source buffer into the output buffer
+VGy
+
+VG"_d
+p
+
+\\ Add a mock first line so that searches from gg include the actual first line
+gg
+Ostart
+
+\\# @s (@1): Recurisve search and transform macro
+\\# @1 - pre-search motion to correctly position cursor
+\\# *Transforms buffer
+\\#
+\\# Preconditions: 
+\\#   -Sentinel value appended at the end of the buffer
+\\#   -One transformation has already been performed, hence initialising 
+\\#    'n' and '.'
+\\#
+\\# Motion selection for @1:
+\\# For an erasing type operation (.) like delete or a complete change like
+\\# abc -> xyz, where the search will no longer match the transformed section,
+\\# use @0 = "k". 
+\\# Otherwise, select an approriate motion that advances past the transformed
+\\# region (l, w, j, etc.) before executing the next search
+o
+  a@1n
+  ajk
+  a.
+  a@s
+"syiW"_dd
+
+\\ Remove empty lines and comments
+
+\\ Insert sentinel value for search
+Go
+\\ Set up macro argument
+ogg
+"1yiW"_dd
+\\ Set up search and operation to delete empty lines and comment lines
+gg
+/^\s*\($\|\\\\\)
+\\ jk for the edge case where no matches exists, and hence sentinel might be 
+\\ deleted before macro is invoked
+jk"_dd
+@s
+\\ Delete sentinel value
+Gdd
+
+\\ Left trim all lines
+o
+  a0d^
+  aj
+  a@0
+"0yiW"_dd
+gg
+@0
+
+\\ Mark read file references for linker to resolve
+o
+  a/^\\r \S*[ \t]*$
+  ajk
+  a0dW
+  ag_a_
+  a$dg_
+  aB
+  aI VC.unresolved("$")
+  a@0
+$v0"0ydd
+
+\\ sentinel value
+Go\r a
+gg
+@0
+Gdd
+
+\\ Insert sentinel value for search
+Go\
+\\ Set up macro argument
+al"1dl
+\\ Set up search and operation to perform transformations for lua string format
+\\ " -> \"
+\\ \ -> \\
+gg
+/[\\"]
+i\
+@s
+\\ Delete sentinel value
+Gdd
+
+\\ Insert sentinel value for search
+Go
+\\ Set up macro argument
+ogg
+"1yiW"_dd
+\\ Set up search and operation to transform ^M -> \13 for lua string format
+gg
+/\%x0d
+\\ jk for the edge case where no ^M exists, and hence sentinel might be deleted
+\\ before macro is invoked
+jkcl\13
+@s
+\\ Delete sentinel value
+Gdd
+
+\\ Enclose all sections in double quotes, and add a comma suffix
+o
+  aI"A",
+  a/^\S.*
+  ajk
+  a@0
+"0yiW"_dd
+Goa
+gg
+@0
+Gdd
+
+\\ Correct file dependency syntax affected by transformations o
+o
+  a/^\s
+  axf\x;x
+  a@0
+"0yiW"_dd
+Go a
+gg
+@0
+Gdd
+
+\\ Remove start marker
+ggdd
+
+gg
+Olua << EOF
+
+Goa
+o"
+\\ Wrap each section in a VC.run() invocation
+o
+  a/^\"
+  ajk
+  aOVC.run({
+  a/^[^\"]
+  aO})
+  a2jj2k
+  a@0
+$v0"0y"_dd
+gg
+@0
+Gdd
+Gdd
+GoEOF
+
+oCompiled # -> %
+"ydd
+
+\\ Save output file and exit
+ZZ

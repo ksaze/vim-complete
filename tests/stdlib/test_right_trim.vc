@@ -1,0 +1,78 @@
+VGd
+
+\r std:assert_absent
+
+i0
+$v0"ay"_dd 
+
+\r std:right_trim
+
+i0
+$v0"my"_dd 
+
+o1"xyldd
+
+iaaaaa  
+oaaaaa 
+oaaaaa   
+oaaaaa  
+oaaaaa   
+
+oFAIL right_trim removeTrailingSpaces"zdd
+
+@m 
+
+o^\%(aaaaa$\)\@!.*\zs$
+$v0"1y"_dd 
+
+@a
+@1
+
+oPASS right_trim removeTrailingSpaces"ydd
+
+ggVGd
+
+i  aaaaa
+o  aaaaa
+o  aaaaa
+o  aaaaa
+o  aaaaa
+
+oFAIL right_trim preserveLeadingSpaces"zdd
+
+@m 
+
+o^\%(\s\saaaaa$\)\@!.*\zs$
+$v0"1y"_dd 
+
+@a 
+@1
+
+G"yp
+oPASS right_trim preserveLeadingSpaces
+Vk"yd
+
+ggVGd
+
+i   
+o   
+o  
+o
+
+oFAIL right_trim shouldConvertWhitespaceOnlyLineToEmptyString"zdd
+
+@m 
+
+o\S
+$v0"1y"_dd
+
+G"yp
+GoPASS right_trim shouldConvertWhitespaceOnlyLineToEmptyString
+V2k"yd
+
+\\ Set exit code to 0 
+o0"xyldd
+\\ Clear stderr
+o"zyldd
+
+ZQ

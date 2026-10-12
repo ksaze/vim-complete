@@ -1,0 +1,31 @@
+VGd
+
+\\ Set exit code to 1
+o1"xyldd
+
+otest-data/raw.vc
+f
+gg0vG$y
+ZQ
+"_dd
+p
+
+\r local:preprocess
+
+oFAIL compiler:preprocess matchesTargetFile"zdd
+
+otest-data/preprocessed.vc
+$v0"1y"_dd
+
+\r std:file_diff_assert
+
+@1
+
+oPASS compiler:preprocess matchesTargetFile"ydd
+
+\\ Set exit code to 0 
+o0"xyldd
+\\ Clear stderr
+o"zyldd
+
+ZQ

@@ -1,0 +1,13 @@
+\\ copy_register(@1, @2)
+\\ transfers contents of register stored in @1 to register stored in @2
+o
+  ao"1p
+  a$v0"1y"_dd
+  ao"2y
+  a$v0"2y"_dd
+  ao
+  a@1
+  a$v0
+  a@2
+  add
+$v0"0ydd

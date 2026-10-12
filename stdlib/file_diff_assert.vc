@@ -1,0 +1,59 @@
+\\ Single use. Not a macro
+\\ Register @1 must be set to second file before \r 
+
+\\ Copy current file to end of target file
+ggVGy
+o1
+f
+Gp
+
+\\ Mark start of current file section
+mj
+
+\\ Mark start of target file section
+ggmi
+
+\\ interleave both file sections
+o
+  a'jv'i"1y
+  aGo"1p
+  ajk
+  aVGd
+  a'j"1dd
+  amj
+  a'i
+  a"1p
+  ajmi
+  a@0
+$v0"0y"_dd
+
+@0 
+
+\\ Modified delete_pattern with linewise visual mode delete
+o
+  a/\%(^\(.*\)$\n^\1$\)\|^\%$
+  aGo
+  aggO
+  ao
+  aan
+  aajk
+  aagnV"_d
+  aak
+  aa@2
+  a$v0"2y"_dd
+  aogg"_ddG"_dd
+  a$v0"1y"_dd
+  agg@2
+$v0"0y"_dd
+
+@0
+@1
+
+\r std:assert_absent
+
+o\%(\%^$\)\@!
+$v0"1y"_dd
+
+@0
+
+ZQ

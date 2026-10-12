@@ -1,0 +1,19 @@
+\r std:left_trim
+
+@0
+ 
+\r std:delete_pattern
+
+\\ Delete comments and empty lines
+o^\(\|\\\\.*\)$
+$v0"1y"_dd
+
+@0
+@1
+
+\\ Right trim all \r compiler directive lines
+o^\\r.\{-}\zs\s\+$
+$v0"1y"_dd
+
+@0
+@1

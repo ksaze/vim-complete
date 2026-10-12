@@ -1,0 +1,263 @@
+\\ Mark the start of input
+gg0
+mi
+
+\\ Temporary recursive macro to count number of lines in input
+\\ Stores number of lines in register j
+gg0
+O0
+mp
+jmq
+
+o
+  a'p
+  a
+  a'q
+  ajmq
+  a@0
+$v0"0ydd
+
+@0
+'p$v0"mydd
+
+\\ Temporary macro for creating a new line
+o
+  ao
+$v0"0ydd
+
+\\ @m - Number of lines in input grid
+\\ 'i@mj - Jump to end of input grid
+'i@mj
+100@0
+
+\\ Mark start of ouput construction buffer
+mo
+\\ Mark current operating line of buffer
+\\ Increment to next line when one of input is processed
+mb
+\\ Mark start of rule mapping table and create table
+\\ Actual table starts on the next line so that forward search from 't can work correctly
+o
+mt
+o0 #:· ·:·
+o1 #:· ·:·
+o2 #:# ·:·
+o3 #:# ·:#
+o4 #:· ·:·
+o5 #:· ·:·
+o6 #:· ·:·
+o7 #:· ·:·
+o8 #:· ·:·
+
+'i
+\\ --------- Transformation Macros -------- \\
+
+\\ Register reference Table
+\\ @a - centre cell of current region
+\\ @b - number of live cells excluding centre in current region
+\\ @c - mapped cells for current region
+\\ @i - row processing index
+\\ @j - column processing index
+\\ @m - max number of rows
+\\ @n - max numbers of columns
+\\ @p - padding generator
+\\ @g (@0) - increment register (@0) by 1
+\\ @h (@0) - decrement register (@0) by 1
+\\ @s - one generation
+\\ @l - remove unnecessary padding layer if all cells are dead
+\\ @t - trim padding/outermost layer
+
+\\ Macro @p - Adds a layer of padding
+\\ 'i, @m, @n must be set correctly
+\\ 2@p fails because @m and @n aren't updated
+o
+  a'i
+  ao
+  aa0I·A·j0
+  a$v0"0ydd
+  a'i
+  a@m@0
+  a'iyl
+  aO
+  a@nppp
+  a'i@mj
+  a@nppp
+$v0"pydd
+
+\\ @g (@0) - Increment register (@0) by 1
+o
+  a'i
+  aO
+  aa"0p
+  a"1yiW"_dd
+  a'i
+  aO
+  aa$v0"0ydd
+  a"2yiW"_dd
+  aO
+  a@1
+  a'ik
+  a
+  a@2
+$v0"gydd
+
+\\ @h (@0) - decrement register (@0) by 1
+o
+  a'i
+  aO
+  aa"0p
+  a"1yiW"_dd
+  a'i
+  aO
+  aa$v0"0ydd
+  a"2yiW"_dd
+  aO
+  a@1
+  a'ik
+  a
+  a@2
+$v0"hydd
+
+\\ @v - copy neighbourhood
+o
+  a`i
+  a@ij@jl
+  akh2l2j"0y
+$v0"vydd
+
+\\ @e - extract cell state and count of live neighbours from yanked neighbourhood
+\\ Flatten structure, copy centre cell into reg @a
+\\ Count number of alive neighbours, copy into reg @b
+o
+  a't9j
+  ao
+  a"0p
+  aJJ
+  a05l"adl
+  aO0
+  aOaaaaaaaa
+  amj
+  aO0
+  \\ Temporary macro for counting number of # in input using regex conditional
+  \\ regex conditional makes it deterministic, which allows it to be run with
+  \\ count arguments instead of relying on recursion (f#x based approach)
+  \\ Recursion isn't ideal in this case because this is a helper function. 
+  \\ Recursive macros rely on failed motions, which not only the terminate 
+  \\ the current macro but also the macro which invoked it.
+  \\ The max possible # is known (8) so the default/else part of the regex
+  \\ conditional can do a no-op when no '#' are present any longer.
+  ao
+    aa'j
+    aa/#
+    aax
+    aak
+  a$v0"0ydd
+  a8@0
+  a'jj
+  a"byl
+  a2k4dd
+$v0"eydd
+
+\\ @q - Use parsed neighbourhood @a, @b to find next generation of the cell
+\\ Next cell state stored in @c
+o
+  a't
+  a/b
+  a/a:
+  a2l
+  a"cyl
+  a'b
+  a$"cp
+$v0"qydd
+
+\\ Macro @u - Next generation output of one cell
+o
+  a@v
+  a@e
+  a@q
+  aaj"0dl
+  a@g
+$v0"uydd
+
+\\ Macro @r - Process one row of input
+o
+  a@n@u
+  a'bo
+  amb
+  aa1"jdl
+  aai"0dl
+  a@g
+$v0"rydd
+
+\\ Macro @t - deletes outermost layer of board
+o
+  ao
+  aa0x$xj
+  a$v0"0ydd
+  a'i@m@0
+  a'i@mjkdd
+  a'idd
+  ami
+  aam"0dl
+  a2@h
+  aan"0dl
+  a2@h
+$v0"tydd
+
+\\ Macro @l - Deletes the outermost (padding) layer of board if all
+\\ cells are dead using @t
+o
+  a'i@mjk"0y
+  a'i$@mjk"1y
+  a'i"2yy
+  a'i@mjk"3yy
+  aGo"0p
+  a@mJ
+  ao"1p
+  a@mJ
+  a"2p
+  a"3p
+  a3k4J
+  aO
+  aO
+  aO@t
+  aj
+  a/#
+  ak
+  a"0yiW
+  aG"_d3k
+  a@0
+$v0"lydd
+
+\\ Macro @s - Go one generation forward
+o
+  \\ Apply padding once
+  a@p
+  \\ Include padding layer as part of input space
+  aam"0dl
+  a2@g
+  aan"0dl
+  a2@g
+  a'ik
+  ami
+  \\ Apply padding again
+  a@p
+  \\ Adjust input mark so that index pointer jumps work correctly
+  a'ik
+  ami
+  \\ Initialise index pointers
+  aa1"idl
+  aa1"jdl
+  \\ Apply transformation
+  a@m@r
+
+  \\ Remove input and replace it with next generation
+  a'i
+  av@ij$d
+  a'o
+  av@mjk$d
+  agg0
+  ap
+  a@l
+  agg
+$v0"sydd

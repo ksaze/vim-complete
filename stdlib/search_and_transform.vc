@@ -1,0 +1,19 @@
+\\ search_and_transform(@1, @2)
+\\ @1: match pattern to replace
+\\ @2: macro to perform on matched pattern
+\\ Call @1 after execution for buffer cleanup
+o
+  a/\%(1\)\|^\%$
+  aGo
+  aggO
+  ao
+  aan
+  aajk
+  aa@2
+  aa@3
+  a$v0"3y"_dd
+  aoG"_ddgg"_dd
+  a$v0"1y"_dd
+  agg@3
+$v0"0y"_dd
+

@@ -1,0 +1,84 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build & test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: cli/go.mod
+          cache-dependency-path: cli/go.sum
+
+      - name: Install golangci-lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          install-only: true
+
+      - name: Install Neovim
+        env:
+          NVIM_VERSION: v0.12.6
+        run: |
+          curl -fL "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-x86_64.tar.gz" \
+            -o "$RUNNER_TEMP/nvim.tar.gz"
+          mkdir -p "$RUNNER_TEMP/nvim"
+          tar xzf "$RUNNER_TEMP/nvim.tar.gz" \
+            -C "$RUNNER_TEMP/nvim" \
+            --strip-components=1
+          rm "$RUNNER_TEMP/nvim.tar.gz"
+          echo "$RUNNER_TEMP/nvim/bin" >> "$GITHUB_PATH"
+
+      - name: Set up Lua
+        uses: leafo/gh-actions-lua@v13
+        with:
+          luaVersion: "5.4"
+
+      - name: Set up LuaRocks
+        uses: leafo/gh-actions-luarocks@v6
+
+      - name: Install Luacheck
+        run: luarocks install luacheck
+
+      - name: Install StyLua
+        run: |
+          curl -fL https://github.com/JohnnyMorganz/StyLua/releases/download/v2.6.0/stylua-linux-x86_64.zip -o "$RUNNER_TEMP/stylua.zip"
+          unzip "$RUNNER_TEMP/stylua.zip" -d "$RUNNER_TEMP/stylua"
+          chmod +x "$RUNNER_TEMP/stylua/stylua"
+          sudo install "$RUNNER_TEMP/stylua/stylua" /usr/local/bin/stylua
+          rm -rf "$RUNNER_TEMP/stylua" "$RUNNER_TEMP/stylua.zip"
+
+      - name: Show toolchain versions
+        run: |
+          nvim --version
+          go version
+          golangci-lint --version
+          lua -v
+          luacheck --version
+          stylua --version
+
+      - name: Run golangci-lint
+        run: cd cli && golangci-lint run --config ../.golangci.yml
+
+      - name: Check Go formatting
+        run: cd cli && golangci-lint fmt --diff --config ../.golangci.yml
+
+      - name: Check Lua formatting
+        run: stylua --check .
+
+      - name: Run Luacheck
+        run: luacheck .
+
+      - name: Build (release)
+        run: ./scripts/build.sh release
+
+      - name: Run test suite
+        run: ./scripts/run_test_suite.sh

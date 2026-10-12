@@ -1,0 +1,85 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    name: Build Linux x86-64 release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify tag is on main
+        run: |
+          git fetch origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "Error: tagged commit is not on main."
+            exit 1
+          fi
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: cli/go.mod
+          cache-dependency-path: cli/go.sum
+
+      - name: Install Neovim
+        env:
+          NVIM_VERSION: v0.12.6
+        run: |
+          curl -fL "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-x86_64.tar.gz" \
+            -o "$RUNNER_TEMP/nvim.tar.gz"
+          mkdir -p "$RUNNER_TEMP/nvim"
+          tar xzf "$RUNNER_TEMP/nvim.tar.gz" \
+            -C "$RUNNER_TEMP/nvim" \
+            --strip-components=1
+          echo "$RUNNER_TEMP/nvim/bin" >> "$GITHUB_PATH"
+
+      - name: Build release
+        run: ./scripts/build.sh release
+
+      - name: Package Linux x86-64 build
+        run: |
+          tar -czf linux-x86-64.tar.gz -C build .
+          sha256sum linux-x86-64.tar.gz > linux-x86-64.tar.gz.sha256
+
+      - name: Package Windows x86-64 build
+        shell: bash
+        run: |
+          rm build/vc
+          GOOS=windows GOARCH=amd64 go -C cli build -o ../build/vc.exe ./cmd/VimComplete
+          tar -czf windows-x86-64.tar.gz -C build .
+          sha256sum windows-x86-64.tar.gz > windows-x86-64.tar.gz.sha256
+
+      - name: Create GitHub Release if needed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" \
+              --title "$GITHUB_REF_NAME" \
+              --generate-notes
+          fi
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "$GITHUB_REF_NAME" \
+            linux-x86-64.tar.gz \
+            linux-x86-64.tar.gz.sha256 \
+            windows-x86-64.tar.gz \
+            windows-x86-64.tar.gz.sha256 \
+            --clobber

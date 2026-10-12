@@ -1,0 +1,4 @@
+**/vc-build/
+**/*.vcx
+test-scripts/
+build/

@@ -1,0 +1,128 @@
+VGd
+
+\r std:assert_present
+
+i0
+$v0"ay"_dd 
+
+\r std:delete_pattern
+
+i0
+$v0"my"_dd 
+
+o1"xyldd
+
+o
+  aGmi
+  a"yp
+  aG"1p
+  aV'ij"yd
+$v0"py"_dd
+
+\\ CASE 1
+oFAIL delete_pattern no_matches"zdd
+
+ggiabc
+
+odef$v0"1y"_dd
+
+@m
+@1
+
+o\%^abc\zs\n00\%$$v0"1y"_dd
+
+@a
+@1
+
+dd
+oPASS delete_pattern no_matches"ydd
+
+\\ CASE 2
+oFAIL delete_pattern single_match"zdd
+
+ggihello 123 world
+
+o\d\+$v0"1y"_dd
+
+@m 
+@1 
+
+o\%^hello  world\zs\n00\%$$v0"1y"_dd
+
+@a 
+@1
+
+dd
+oPASS delete_pattern single_match"1dd
+@p
+
+\\ CASE 3
+oFAIL delete_pattern consecutive_match"zdd
+
+ggidabcabcd
+
+oabc$v0"1y"_dd
+
+@m 
+@1 
+
+o\%^dd\zs\n00\%$$v0"1y"_dd
+
+@a 
+@1
+
+dd
+oPASS delete_pattern consecutive_match"1dd
+@p
+
+\\ CASE 4 
+oFAIL delete_pattern complete_match"zdd
+
+ggiabc
+
+oabc$v0"1y"_dd
+
+@m
+@1
+
+\\ Can't match an empty line with assert_present
+\\ This ensure that the start of the match isn't the first character
+Ostart
+
+o\%^start\zs\n\n00\%$$v0"1y"_dd
+
+@a
+@1
+
+gg2dd
+oPASS delete_pattern complete_match"1dd
+@p
+
+\\ CASE 5 
+oFAIL delete_pattern multi_line_match"zdd
+
+ggifirst
+osecond
+othird
+ofourth
+
+osecond\nthird\n$v0"1y"_dd
+
+@m 
+@1 
+
+o\%^first\zs\nfourth\n00\%$$v0"1y"_dd 
+
+@a 
+@1 
+
+Vggd
+oPASS delete_pattern multi_line_match"1dd
+@p
+
+\\ Set exit code to 0 
+o0"xyldd
+\\ Clear stderr
+o"zyldd
+
+ZQ

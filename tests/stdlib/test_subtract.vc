@@ -1,0 +1,78 @@
+VGd
+
+\r std:assert_present
+
+i0
+$v0"ay"_dd 
+
+\r std:subtract
+
+i0
+$v0"my"_dd 
+
+o1"xyldd
+
+o
+  aoFAIL subtract i"zyy"_dd
+  aoi 
+  a^"1yiWW
+  a"2yiWW
+  a"0yiW
+  a"_dd
+  a@m
+  aggO 1
+  ao\%^ \zs0
+  a$v0"1y"_dd
+  a@a
+  agg"_dd
+  aGo
+  aaPASS subtract i
+$v0"ty"_dd
+
+o3 3 0
+$v0"iy"_dd
+
+@t
+@1
+
+Gmi
+"yyy
+
+o50 25 25
+$v0"iy"_dd
+
+@t
+@1
+
+GV'i"yy
+
+o7 0 7
+$v0"iy"_dd
+
+@t
+@1
+
+GV'i"yy
+
+o50 100 -50
+$v0"iy"_dd
+
+@t
+@1
+
+GV'i"yy
+
+o77 66 11
+$v0"iy"_dd
+
+@t
+@1
+
+GV'i"yy
+
+\\ Set exit code to 0 
+\\ Clear stderr
+o0"xyldd
+o"zyldd
+
+ZQ

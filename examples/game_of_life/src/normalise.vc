@@ -1,0 +1,17 @@
+\\ Remove any leading lines
+ggO
+/\Sk
+dgg
+
+\\ Remove any trailing lines
+Go
+?\Sj
+dG
+
+\\ Deletes all lines in case file has nothing but empty lines
+G
+?\%^\(^\s*\n\)*\%$
+gnd
+
+\r std:trim 
+@0

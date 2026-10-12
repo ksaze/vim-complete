@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question / discussion
+    url: https://github.com/ksaze/vim-complete/discussions
+    about: For "how do I..." questions or general discussion, not a confirmed bug or a concrete proposal.

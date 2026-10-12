@@ -1,0 +1,83 @@
+\\ clear input file 
+VGd
+
+\r std:assert_present
+
+\\ store assert macro in @a
+i0
+$v0"ay"_dd
+
+\r std:add 
+
+\\ store add macro in @m
+i0
+$v0"my"_dd
+
+\\ set exit code to 1
+\\ Reset to 0 if all tests pass
+o1"xyldd
+
+o
+  aoFAIL add i"zyy"_dd
+  aoi 
+  a^"1yiww
+  a"2yiww
+  a"0yiw
+  a"_dd
+  a@m
+  aggO 1
+  ao\%^ \zs0
+  a$v0"1y"_dd
+  a@a
+  agg"_dd
+  aGo
+  aaPASS add i
+$v0"ty"_dd
+
+o1 2 3
+$v0"iy"_dd
+
+@t
+@1
+
+Gmi
+"yyy
+
+o3 5 8
+$v0"iy"_dd
+
+@t
+@1
+
+GV'i"yy
+
+o7 0 7
+$v0"iy"_dd
+
+@t
+@1
+
+GV'i"yy
+
+o50 50 100
+$v0"iy"_dd
+
+@t
+@1
+
+GV'i"yy
+
+o1234 5678 6912
+$v0"iy"_dd
+
+@t
+@1
+
+GV'i"yy
+
+\\ Set exit code to 0 
+o0"xyldd
+\\ Clear stderr
+o"zyldd
+
+ZQ

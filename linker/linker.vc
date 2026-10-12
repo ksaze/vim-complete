@@ -1,0 +1,271 @@
+\\# Module linker
+\\# Links required object files together by searching for VC.unresolved()
+\\# Requires a list of vco files in the current PATH, provided by cli wrapper
+\\#
+\\# Returns a vcx file with a single VC.run() call
+\\#
+\\# run with <input_file> <output_file> <module_list>
+\\#
+\\# Module list should be lines of 
+\\# <namespace> <path>
+\\# for example:
+\\# local: /path/to/module.vco 
+\\# std: /path/to/module.vco
+
+\\ Copy the source buffer into the output buffer
+\\ Done before any macros are loaded to make sure the input file doesn't
+\\ have any changes which would fail ZZ for the output file
+gg0vG$y
+
+VG"_d
+p
+
+\\# Macro @p: Format modules buffer for error handling
+\\#
+\\# Requires:
+\\#   - Current window must be modules
+\\#
+\\# Effects:
+\\#   - Adds an empty line after every module.
+\\#   - Prepends a counter for expansion-depth counter and mark as 'r'
+\\#   - Adds conditionals match anchors to increment the counter or reset it
+\\#     back to zero based on type of module, i.e., root or indirect
+\\# 
+\\# Notes:
+\\# Add a line "root" below initial module requirements to differentiate them
+\\# from the modules added indirectly through the expansion.
+\\# In the object file a VC.unresolved() can only be followed by another VC call
+\\# or EOF, so the next line can be used to anchor searches. Copy the first 
+\\# three characters of the line below (j"ty3l) and search using ?^Rt.
+\\# Execute the macro after the search anchor word to increment or reset counter.
+o
+  agg
+  aOVC. `r
+  aoEOF `r
+  aoroot `rcw0
+  ao$ 0
+  a0wmr
+  aoZQZQ
+  ao
+  aaoj@0
+  a$v0"0y"_dd
+  a'r2j
+  a@0
+$v0"pydd
+
+\\# Macro @y(@n, @f, @t): Search for a module and copy its contents.
+\\#
+\\# Inputs:
+\\#   - @f: Module name.
+\\#   - @n: Namespace.
+\\#   - @t: First three characters of the line following the module reference.
+\\#
+\\# Requires:
+\\#   - Current window is the modules buffer.
+\\#   - Modules buffer has been initialised for linker processing.
+\\#
+\\# Effects:
+\\#   - Module content without the lua << EOF header & EOF footer stored in @".
+\\# 
+\\# Failures:
+\\#   - Module is not a valid object file.
+\\#   - Module cannot be found in the module search path.
+\\#   - Maximum expansion depth (50) is exceeded.
+\\#
+\\# Error Handling:
+\\#   - Delegates object file validation to @a which uses @h to set quit macro
+\\#     in case of failure.
+\\#   - Missing module and expansion-depth exceptions result in a direct quit
+o
+  aoError: Failed to resolve module 'nf'.
+  ao
+  aoThe module list supplied to the linker does not contain the required module.
+  aV2k"zd
+  a'r
+  a/^n \S*\/f\.vco
+  aj$v0"0y
+  a@0
+  aoError: \r nested too deeply.
+  a$v0"zydd
+  a?t
+  aW"0yiW
+  a@0
+  a'r2j
+  a?^$ 50
+  aj$v0"0y
+  a@0
+  a'r
+  a/^n \zs\S*\/f\.vco
+  af
+  a@a
+  aggdd
+  aGdd
+  aVggy
+  aZQ
+$v0"yydd
+
+\\# Macro @a: Verifies that the current buffer is a valid vco file
+\\#
+\\# Failures:
+\\#   - Current buffer is not a valid vco file
+\\#
+\\# Effects:
+\\#   - Sets @z to invalid vco file error message
+\\#   - Sets @h for exception handling to called after the entry macro
+\\# 
+\\# Notes:
+\\# Exits early using a failed motions if the file isn't a valid object file 
+\\# with @h = "ZQ.." to be called after the entry macro of the call stack. @h
+\\# will be a no-op if the file was valid.
+o
+  aOError: '%' is not a valid object file
+  a"zdd
+  aOZQ@h
+  a"hdd
+  aGo00
+  a0
+  a/^\(.*\(VC\.run({\|".*"\|})\|lua << EOF\|EOF\n00\%$\|00\%$\)\)\@!.*\zs$
+  al
+  a0
+  a/\%^\%(lua << EOF$\)\@!.*\zs$
+  al
+  a0
+  a/^.*})\zs\(\n^VC\|\n^EOF\)\@!
+  al
+  a0
+  a/^.*VC.run({\zs\(\n^".*"\)\@!
+  al
+  a0
+  a/^".*\zs"\nVC
+  al
+  a"hdd
+$v0"aydd
+
+\\# Macro @m - Recursive substitution of VC.unresolved() references with module
+\\#
+\\# Requires:
+\\#   - Current window is the input file
+\\#   - Input file and modules exist in a horizontal split where modules is above
+\\#     input file
+\\#   - Modules buffer is prepared for linker processing
+\\#   - Every module reference is the initial input file must have a "root" line
+\\#     marker below it
+\\#
+\\# Effects:
+\\#   - All VC.unresolved() references are replaced with VC.run() recursively
+\\#
+\\# Failures:
+\\#   - Module doesn't exist in PATH
+\\#   - Maximum expansion depth (50) violated
+\\#   - Some module reference isn't a valid object file
+\\#
+\\# Error Handling:
+\\#   - @a (assert for valid object file) sets @h to a quit macro if a required
+\\#     module isn't a valid object file. @h must be called after the entry macro
+\\#     to ensure correct error handling in case of an error.
+o
+  agg
+  a/^VC.unresolved(\"\zs.*\")
+  ajk
+  amfk
+  a/^VC.unresolved(\"\zs[^:]*\")
+  ailocal:
+  a`f
+  a"ndf:
+  a"fyi"
+  aj0"ty3l
+  ak
+  a@y
+  aj
+  a'f
+  a"_dd
+  aP
+  aGciWVC.unresolved("a")
+  a@m
+$v0"mydd
+
+\\ Assert that input file is a valid object file
+@a
+@h
+
+\\ Parse command line arguments 
+\\ Open modules buffer in another window
+ggOc 
+g_
+f
+@p
+j
+dd
+
+\\ Sentinel character
+GoVC.unresolved("a")
+
+\\ Mark all initial directives by adding a new line = "root" below.
+\\ This differentiates initial directives from newly added ones from appended
+\\ modules. Thus allowing recursion depth counter to be reset.
+o
+  a/^VC.unresolved(\".*\")
+  ajk
+  aoroot
+  a@0
+$v0"0ydd
+gg
+@0
+
+\\ Substitute all unresolved references
+@m
+@h
+
+\\ Remove sentinel marker
+Gdd
+
+\\ Remove root markers
+Goroot
+o
+  a/^root
+  ajk
+  a"_dd
+  ak
+  a@0
+$v0"0ydd
+gg
+@0
+Gdd
+
+\\ Assert post linking buffer state
+o
+  a/\%$
+  a/^\(.*\(VC\.run({\|".*"\|})\|\%^lua << EOF\|EOF\%$\)\)\@!.*$
+  aj
+  aoInternal Error: Linker reached an unexpected state after processing.
+  a$v0"zydd
+  aZQZQ
+$v0"0ydd
+@0
+
+\\ Temporary search and transform macro for combining VC.run calls
+\\ Requires sentinel character at the end of the buffer
+o
+  a/})\nVC.run({
+  ajj2k
+  a2dd
+  a@0
+$v0"0ydd
+
+Go})
+oVC.run({
+gg
+@0
+
+Gk
+2dd
+
+oLinked file % with required modules successfully.
+"ydd
+
+\\ Clear stderr register
+o"zyldd
+
+\\ Save output file
+ZZ
+ZQ

@@ -1,0 +1,39 @@
+\r std:assert_absent
+
+o0
+$v0"ay"_dd 
+
+o^\\[^r].*\zs$
+$v0"1y"_dd
+
+@a
+
+$v0"2y
+oInvalid Compiler Directive: `2` is not a known compiler directive.
+"zyy"_dd
+
+@1
+
+o^\\r \S*\s\+.*\zs$
+$v0"1y"_dd
+
+@a
+
+$v0"2y
+oInvalid Module Name: expected a valid module name.
+o`2`
+Vk"zygv"_d
+
+@1
+
+o^[^iacosIACOSR]*\zs\([fF]\)\@<!:.*\(\)\@<!\%d13.*\zs$
+$v0"1y"_dd
+
+@a
+
+$v0"2y
+oMoral Failure: Tried to use an Ex command.
+o`2`
+Vk"zygv"_d
+
+@1

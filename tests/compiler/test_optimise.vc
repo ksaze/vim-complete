@@ -1,0 +1,31 @@
+VGd
+
+\\ Set exit code to 1
+o1"xyldd
+
+otest-data/preprocessed.vc
+f
+gg0vG$y
+ZQ
+"_dd
+p
+
+\r local:optimise
+
+oFAIL compiler:optimise matchesTargetFile"zdd
+
+otest-data/optimised.vc
+$v0"1y"_dd
+
+\r std:file_diff_assert
+
+@1
+
+oPASS compiler:optimise matchesTargetFile"ydd
+
+\\ Set exit code to 0 
+o0"xyldd
+\\ Clear stderr
+o"zyldd
+
+ZQ

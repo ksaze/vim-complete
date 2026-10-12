@@ -1,0 +1,53 @@
+\r std:assert_absent
+
+\\ copy macro to @a
+o0
+$v0"ay"_dd 
+
+\\ Match a board with just one empty line
+o\%^\n00\%$
+$v0"1y"_dd
+
+oError: Empty board.
+"zyy"_dd
+
+@a
+@1
+
+\\ Match any characters other than the alive and dead state characters
+o[^#·].*$
+$v0"1y"_dd
+
+@a
+
+"2yl
+oError: Invalid character '2' found in board. The Game of Life board may only contain '#' or '·'.
+"zyy"_dd
+
+@1
+
+\\ Count the number of characters in the first line and store in @n
+ggO0
+mp
+jmq
+
+o
+  a'p
+  a
+  a`q
+  almq
+  a@0
+$v0"0ydd
+@0
+
+'p$v0"nydd
+
+\\ Check if any line is any length of other than @n
+o^\%(.\{n}$\)\@!
+$v0"1y"_dd
+
+oError: Invalid board format. All rows in the board must have the same length.
+"zyy"_dd
+
+@a
+@1

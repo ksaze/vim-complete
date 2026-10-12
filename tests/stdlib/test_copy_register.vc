@@ -1,0 +1,41 @@
+VGd
+
+\r std:assert_present
+
+i0
+$v0"ay"_dd 
+
+\r std:copy_register
+
+i0
+$v0"my"_dd 
+
+\\ Set exit code to 1
+o1"xyldd
+
+oFAIL copy_register test_copy_register"zdd
+
+o"vldd 
+oaaa$v0"uydd
+
+ou"1yl"_dd
+ov"2yl"_dd
+
+ggOu
+
+@m
+
+o\%^aaa\zs$
+$v0"1y"_dd
+
+@a
+@1
+
+oPASS copy_register test_copy_register"ydd
+
+\\ Set exit code to 0 
+o0"xyldd
+\\ Clear stderr
+o"zyldd
+
+ZQ

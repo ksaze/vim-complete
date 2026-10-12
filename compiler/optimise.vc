@@ -1,0 +1,30 @@
+\r std:delete_pattern
+
+\\ remove any redundant escape characters at the end of a line
+o\(\)\@<!\%d27$
+$v0"1y"_dd
+
+@0
+@1
+
+\\ remove consecutive escape characters
+o\(\)\@<!\%d27\zs\%d27\+
+$v0"1y"_dd
+
+@0
+@1
+
+\\ merge consecutive append chains like
+\\ a..
+\\ a..
+\\ a..
+\\ => a......
+\\ first line can start with any insert mode motion like o, i, gi, etc.
+\\ but all consecutive lines have to appends for the merge to be equivalent
+\\ easier to achieve after segment module is implemented
+
+\\ Remove redundant visual selections which don't perform any operation
+\\ on their selected region. The cursor is still moved when selecting a region
+\\ so the relevant section shouldn't be removed entirely--it should be replaced
+\\ by the only the cursor motions performed in that region. This is assuming 'o'
+\\ isn't used on the visual selection.

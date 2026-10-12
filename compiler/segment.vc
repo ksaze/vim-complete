@@ -1,0 +1,6 @@
+\\ TODO: Transform input file such that each line is only one motion command
+\\ or atleast separate insert mode operations from normal mode motions.
+\\ For insert mode operations the motion which results in the mode change until 
+\\ the escape which changes mode back to normal should be considered one unit.
+\\ This format should be easier for the optimiser and analyser to work with
+0

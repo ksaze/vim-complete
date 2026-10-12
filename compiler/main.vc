@@ -1,0 +1,26 @@
+\\ Copy the source buffer into the output buffer
+VGy
+
+VG"_d
+p
+
+\\ Set exit code to 1
+o1"xyldd
+
+\r preprocess
+\r segment
+\r validate
+\r optimise
+\r codegen
+
+oCompiled # -> %
+"ydd
+
+\\ Set exit code to 0 
+o0"xyldd
+
+\\ Clear stderr
+o"zyldd
+
+\\ Save output file and exit
+ZZ

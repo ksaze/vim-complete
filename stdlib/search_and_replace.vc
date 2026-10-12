@@ -1,0 +1,18 @@
+\\ search_and_replace(@1, @2)
+\\ @1: match pattern to replace
+\\ @2: literal text replacement for matched pattern
+\\ Call @1 after execution for buffer cleanup
+o
+  a/\%(1\)\|^\%$
+  aGo
+  aggO
+  ao
+  aan
+  aajk
+  aagn"_c2
+  aa@3
+  a$v0"3y"_dd
+  aogg"_ddG"_dd
+  a$v0"1y"_dd
+  agg@3
+$v0"0y"_dd

@@ -1,0 +1,91 @@
+\r std:search_and_transform
+
+\\ Mark read file references for linker to resolve
+
+o^\\r \S*[ \t]*$
+$v0"1y"_dd 
+
+o
+  a0"_dW
+  ag_a_
+  a$"_dg_
+  aB
+  aI VC.unresolved("$")
+$v0"2y"_dd 
+
+@0
+@1
+
+\\ Add escape characters before `\` and `"` for lua string format
+
+o[\\"]
+$v0"1y"_dd 
+
+oi\l
+$v0"2y"_dd 
+
+@0 
+@1
+
+\\ Convert control ^M to \13 for lua string format 
+
+o\%x0d
+$v0"1y"_dd 
+
+ocl\13
+$v0"2y"_dd 
+
+@0 
+@1
+
+\\ Add start marker 
+ggO
+
+\\ Enclose all sections in double quotes, and add a comma suffix
+o
+  aI"A",
+  a/^\S.*
+  ajk
+  a@0
+"0yiW"_dd
+Goa
+gg
+@0
+Gdd
+
+\\ Correct file dependency syntax affected by transformations o
+o
+  a/^\s
+  axf\x;x
+  a@0
+"0yiW"_dd
+Go a
+gg
+@0
+Gdd
+
+\\ Remove start marker
+ggdd
+
+gg
+Olua << EOF
+
+Goa
+o"
+\\ Wrap each section in a VC.run() invocation
+o
+  a/^\"
+  ajk
+  aOVC.run({
+  a/^[^\"]
+  aO})
+  a2jj2k
+  a@0
+$v0"0y"_dd
+
+gg
+@0
+
+Gk2dd
+
+oEOF

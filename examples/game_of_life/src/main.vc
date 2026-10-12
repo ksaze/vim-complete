@@ -1,0 +1,40 @@
+\\ Set exit code to 1
+o1"xyldd
+
+oInput Error: Number of generations should be a positive integer
+"zdd
+
+\r std:assert_present 
+
+ggOc
+g_gel"_d0
+
+o\%^ 0*\zs[1-9][0-9]*
+$v0"1y"_dd
+
+@0
+@1
+
+gN"oy
+dd
+
+\r normalise
+\r validate_board
+\r transform_macros 
+
+\\ Go n generations forward
+oo@s
+$v0"0y"_dd
+
+@0
+
+\\ Copy board to stdout 
+'i@mjk
+Vgg"yy
+
+\\ Set exit code to 0 
+o0"xyldd
+\\ Clear stderr
+o"zyldd
+
+ZQ
